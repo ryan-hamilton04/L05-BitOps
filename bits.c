@@ -1,3 +1,4 @@
+
 /* 
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -123,7 +124,9 @@ NOTES:
  *   Rating: 2
  */
 int isNegative(int x) {
-   return 2; 
+   int msb = x >> 31;
+   int negative = msb & 1;
+   return negative; 
 }
 /* 
  * negate - return -x 
@@ -133,7 +136,8 @@ int isNegative(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+    
+  return ~x + 1;
 }
 /* 
  * getByte - Extract byte n from word x
@@ -144,7 +148,9 @@ int negate(int x) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return 2;
+   int get = x >> (n<<3);
+   int byte = get & (0xFF);
+  return byte;
 }
 /* 
  * byteSwap - swaps the nth byte and the mth byte
@@ -156,7 +162,18 @@ int getByte(int x, int n) {
  *  Rating: 2
  */
 int byteSwap(int x, int n, int m) {
-    return 2;
+   int getN = x >> (n<<3);
+   int byteN = getN & (0xFF);
+   int getM = x >> (m<<3);
+   int byteM = getM & (0xFF);
+   int mask1 = ~(0xFF << (n<<3));
+   int mask2 = ~(0xFF << (m<<3));
+   int swap = (x & mask1) & mask2;
+   int putN = byteN << (m<<3);
+   int putM = byteM << (n<<3);
+   int final = swap | (putN | putM);
+
+    return final;
 }
 /* 
  * rotateRight - Rotate x to the right by n bits
@@ -167,7 +184,11 @@ int byteSwap(int x, int n, int m) {
  *   Rating: 3 
  */
 int rotateRight(int x, int n) {
-    return 2;
+
+   int shiftRight = x << 32 + (~n + 1);
+   int shiftLeft = (x >> n) & ((1 << 32 + (~n + 1)) + (~1+1));
+   int rotate = shiftRight | shiftLeft;
+    return rotate;
 }
 /* 
  * addOK - Determine if can compute x+y without overflow
@@ -176,7 +197,21 @@ int rotateRight(int x, int n) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 20
  *   Rating: 3
+ int bitShiftX = x >> 31;
+   int bitShiftY = y >> 31;
+   int sum = x + y;
+   int bitShiftSum = sum >> 31;
+   int neg = bitShiftX & bitShiftY;
+   int pos = !bitShiftX & !bitShiftY; 
+   int noNegOver = neg & bitShiftSum;
+   int noPosOver = pos & !bitShiftSum;
+   int eitherPos = bitShiftX ^ bitShiftY;
+
+
+   return noNegOver | noPosOver | eitherPos;
  */
 int addOK(int x, int y) {
-  return 2;
+   int sum = x + y;
+   int overflow = ((x ^ sum) & (y ^ sum)) >> 31;
+   return !overflow;
 }
