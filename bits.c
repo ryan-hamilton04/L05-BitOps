@@ -197,18 +197,6 @@ int rotateRight(int x, int n) {
  *   Legal ops: ! ~ & ^ | + << >>
  *   Max ops: 20
  *   Rating: 3
- int bitShiftX = x >> 31;
-   int bitShiftY = y >> 31;
-   int sum = x + y;
-   int bitShiftSum = sum >> 31;
-   int neg = bitShiftX & bitShiftY;
-   int pos = !bitShiftX & !bitShiftY; 
-   int noNegOver = neg & bitShiftSum;
-   int noPosOver = pos & !bitShiftSum;
-   int eitherPos = bitShiftX ^ bitShiftY;
-
-
-   return noNegOver | noPosOver | eitherPos;
  */
 int addOK(int x, int y) {
    int sum = x + y;
